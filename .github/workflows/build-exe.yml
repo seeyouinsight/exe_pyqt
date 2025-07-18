@@ -1,7 +1,7 @@
 name: Build Windows EXE
 
 on:
-  workflow_dispatch        # 手动触发；可改成 push / tag
+  workflow_dispatch                # 手动触发；改成 push/tag 亦可
 
 jobs:
   build:
@@ -14,9 +14,9 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.10'     # PyPI 二进制轮子最全的版本段
 
-    # ───── 安装依赖（PowerShell，使用 ` 续行） ─────
+    # ---- 安装依赖（PowerShell，反引号续行） ----------------
     - name: Install dependencies
       run: |
         python -m pip install -U pip
@@ -33,11 +33,19 @@ jobs:
           numpy
         pip install pyinstaller
 
+    # ---- 打包 -------------------------------------------------------------
     - name: Build EXE with PyInstaller
       run: pyinstaller test2.spec
 
+    # ---- 查看 dist 目录（调试用，可保留）----------------------------------
+    - name: Show dist contents
+      run: Get-ChildItem -Recurse dist
+
+    # ---- 上传产物 ---------------------------------------------------------
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ImageAnnotator
-        path: ImageAnnotator.exe
+        path: |
+          dist/*.exe              # one-file 结果
+          dist/ImageAnnotator/**  # onedir 兜底（若误生成目录模式）
