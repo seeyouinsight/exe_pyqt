@@ -63,6 +63,6 @@ exe = EXE(
     pyz, a.scripts, [],
     exclude_binaries=False,         # 单文件必须带 DLL
     name="ImageAnnotator",
-    icon="icon.ico",                # 没有图标可删除此行
+    #icon="icon.ico",                # 没有图标可删除此行
     console=False,                  # 纯 GUI
 )
